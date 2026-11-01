@@ -1,0 +1,22 @@
+const loginView=document.getElementById('loginView');
+const appView=document.getElementById('appView');
+const loginForm=document.getElementById('loginForm');
+const loginError=document.getElementById('loginError');
+const DEMO_EMAIL='josh@creativehq.demo';
+const DEMO_PASSWORD='Create2026!';
+function showToast(message){const toast=document.getElementById('toast');toast.textContent=message;toast.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>toast.classList.remove('show'),2600)}
+function enterApp(name='Alex Johnson'){loginView.classList.add('hidden');appView.classList.remove('hidden');document.getElementById('sideName').textContent=name;document.getElementById('pageTitle').innerHTML=`Good evening, ${name.split(' ')[0]} <span class="wave">✦</span>`}
+loginForm.addEventListener('submit',e=>{e.preventDefault();const email=document.getElementById('email').value.trim().toLowerCase();const password=document.getElementById('password').value;if(email===DEMO_EMAIL&&password===DEMO_PASSWORD){loginError.textContent='';enterApp('Josh Jay')}else{loginError.textContent='Those demo details don't match. Please try again.'}});
+document.getElementById('togglePassword').addEventListener('click',()=>{const input=document.getElementById('password');const visible=input.type==='password';input.type=visible?'text':'password';document.getElementById('togglePassword').textContent=visible?'Hide':'Show'});
+document.getElementById('logoutBtn').addEventListener('click',()=>{appView.classList.add('hidden');loginView.classList.remove('hidden');loginForm.reset();showToast('You have signed out.')});
+const descriptions={overview:'Your creative, college and acting life at a glance.',content:'Plan videos, organise ideas, track filming and keep your content calendar moving.',college:'Keep coursework, assignment briefs, research, due dates and progress together.',scripts:'Practise scenes, split scripts into cues, track tricky lines and run rehearsal sessions.',schedule:'Bring college, filming, rehearsals, recording and personal plans into one calendar.',goals:'Set creative milestones, acting targets and study goals, then track your progress.',settings:'Personalise your workspace and manage your preferences.'};
+function goTo(page){document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.page===page));document.getElementById('crumb').textContent=page[0].toUpperCase()+page.slice(1);document.getElementById('pageTitle').textContent=page==='overview'?'Good evening, Josh':page[0].toUpperCase()+page.slice(1);document.getElementById('pageSubtitle').textContent=descriptions[page]||'';document.getElementById('overviewPage').classList.toggle('hidden',page!=='overview');document.getElementById('otherPage').classList.toggle('hidden',page==='overview');if(page!=='overview'){document.getElementById('otherTitle').textContent=page[0].toUpperCase()+page.slice(1);document.getElementById('otherDescription').textContent=descriptions[page]+' This section is ready to build out with your own notes, deadlines and saved work.'}document.getElementById('sidebar').classList.remove('open')}
+document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.page)));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>goTo(b.dataset.goto)));
+document.getElementById('backOverview').addEventListener('click',()=>goTo('overview'));
+document.getElementById('mobileMenu').addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('open'));
+document.getElementById('quickAction').addEventListener('click',()=>showToast('Quick actions can be connected to your staff workflows.'));
+document.getElementById('notifyBtn').addEventListener('click',()=>showToast('You are all caught up on notifications.'));
+document.getElementById('activityMore').addEventListener('click',()=>showToast('More activity options coming soon.'));
+document.getElementById('globalSearch').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.value.trim())showToast('Search for “'+e.target.value.trim()+'” is a demo feature.')});
+document.querySelectorAll('.task-row input').forEach(input=>input.addEventListener('change',()=>showToast(input.checked?'Nice one — marked complete.':'Task moved back to your list.')));
